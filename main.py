@@ -1,3 +1,4 @@
+import logging
 import time
 
 import requests
@@ -17,6 +18,7 @@ def send_message(tg_token, chat_id, is_negative, lesson_title, lesson_url):
 
 
 if __name__ == '__main__':
+    logging.warning('Бот запущен')
     env = Env()
     env.read_env()
     tg_token = env.str('TELEGRAM_TOKEN')
