@@ -48,26 +48,24 @@ if __name__ == '__main__':
     params = {}
     while True:
         try:
-            try:
-                response = requests.get('https://dvmn.org/api/long_polling/', headers=headers, params=params)
-                response.raise_for_status()
-            except requests.exceptions.ConnectionError:
-                time.sleep(10)
-                continue
-            except requests.exceptions.ReadTimeout:
-                continue
+            response = requests.get('https://dvmn.org/api/long_polling/', headers=headers, params=params)
+            response.raise_for_status()
             attempt_statuses = response.json()
             if attempt_statuses.get('status') == 'found':
                 params['timestamp'] = attempt_statuses.get('last_attempt_timestamp')
                 for attempt in attempt_statuses.get('new_attempts'):
                     send_message(
-                      tg_token,
-                      chat_id,
-                      attempt.get('is_negative'),
-                      attempt.get('lesson_title'),
-                      attempt.get('lesson_url')
+                        tg_token,
+                        chat_id,
+                        attempt.get('is_negative'),
+                        attempt.get('lesson_title'),
+                        attempt.get('lesson_url')
                     )
             elif attempt_statuses.get('status') == 'timeout':
                 params['timestamp'] = attempt_statuses.get('timestamp_to_request')
+        except requests.exceptions.ConnectionError:
+            time.sleep(10)
+        except requests.exceptions.ReadTimeout:
+            continue
         except Exception as err:
             logger.exception(err)
