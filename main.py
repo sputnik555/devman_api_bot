@@ -5,8 +5,10 @@ import requests
 import telegram
 from environs import Env
 
+logger = logging.getLogger('bot_logger')
 
-class MyLogsHandler(logging.Handler):
+
+class LogsHandler(logging.Handler):
 
     def emit(self, record):
         log_entry = self.format(record)
@@ -36,9 +38,8 @@ if __name__ == '__main__':
     tg_loger_token = env.str('TELEGRAM_LOGGER_TOKEN')
     chat_id = env('TG_CHAT_ID')
 
-    logger = logging.getLogger('bot_logger')
     logger.setLevel(logging.INFO)
-    logger.addHandler(MyLogsHandler(tg_loger_token, chat_id))
+    logger.addHandler(LogsHandler(tg_loger_token, chat_id))
     logger.info('Бот запущен')
 
     headers = {
