@@ -23,3 +23,13 @@ pip install -r requirements.txt
 ```bash
 python main.py
 ```
+
+### Запуск бота в Docker
+1. Собираем образ
+```bash
+docker build -t tg_bot:latest .
+```
+2. Запускаем контейнер
+```bash
+docker run --env-file ./.env tg_bot
+```
